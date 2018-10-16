@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Contact } from './contact-list/contact.model';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactService } from './contacts.service';
+import { Subject } from 'rxjs';
 declare var gapi: any;
 
 @Component({
@@ -13,10 +14,14 @@ declare var gapi: any;
 export class ContactsComponent implements OnInit {
   constructor(private http: HttpClient, private contactService: ContactService) {}
   authConfig: any;
-  contactList: any;
-  @Output() valueChange: EventEmitter<any>  = new EventEmitter();
+  contactList: any = [];
+  ContactsFound = false;
+
 
   ngOnInit() {
+
+    this.ContactsFound = false;
+
     this.authConfig = {
       client_id:
         '137487034693-7jlkkn3rbhr2vp66f2n2uodfo7gan8is.apps.googleusercontent.com',
@@ -76,7 +81,8 @@ export class ContactsComponent implements OnInit {
 
     });
 
+    this.ContactsFound = true;
     console.log(this.contactList);
-    this.contactService.setContacts(this.contactList);
+
   }
 }

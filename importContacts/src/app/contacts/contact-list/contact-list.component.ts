@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Contact } from './contact.model';
 import { ContactService } from '../contacts.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -9,18 +10,11 @@ import { ContactService } from '../contacts.service';
 })
 export class ContactListComponent implements OnInit {
 
-  contacts: any;
-  @Output() contactsFoundEvent = new EventEmitter<any>();
+  @Input() contacts: any = [];
+
 
   constructor(private contactService: ContactService) { }
 
   ngOnInit() {
-    this.contacts = this.contactService.getContacts();
   }
-
-  onContactsFound($event) {
-    this.contacts = this.contactService.getContacts();
-  }
-
-
 }

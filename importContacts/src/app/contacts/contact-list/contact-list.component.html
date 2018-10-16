@@ -1,2 +1,15 @@
-
-<li *ngFor="let contact of contacts">{{ contact.email }} {{ contact.name }}</li>
+<div *ngIf="contacts && contacts.length > 0">
+    <br>
+     <h4 class="card-title">Your Contacts</h4>
+     <div class="card">
+       <div class="card-header">Contact Names
+         <span class="float-right">Emails Ids</span>
+       </div>
+       <ul *ngFor="let contact of contacts" class="list-group list-group-flush">
+         <a class="list-group-item">
+           <span class="float-left">{{ contact.name }} </span>
+           <span class="float-right">{{ contact.email }}</span>
+         </a>
+       </ul>
+     </div>
+   </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Contact } from './contact.model';
 import { ContactService } from '../contacts.service';
 import { Subject } from 'rxjs';
+import { Contact } from '../contact.model';
 
 @Component({
   selector: 'app-contact-list',

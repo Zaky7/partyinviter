@@ -1,9 +1,10 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Contact } from './contact-list/contact.model';
+
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactService } from './contacts.service';
 import { Subject } from 'rxjs';
+import { Contact } from './contact.model';
 declare var gapi: any;
 
 @Component({
@@ -14,7 +15,7 @@ declare var gapi: any;
 export class ContactsComponent implements OnInit {
   constructor(private http: HttpClient, private contactService: ContactService) {}
   authConfig: any;
-  contactList: any = [];
+  contactList: Contact[] = [];
   ContactsFound = false;
 
 
@@ -54,31 +55,25 @@ export class ContactsComponent implements OnInit {
 
     this.contactList = [];
 
-    ContactEntry.forEach((entry)=> {
-      //console.log(entry.gd$name);
-      var contact = {
-        name: '',
-        email: ''
-      };
+    ContactEntry.forEach((entry) => {
+      // tslint:disable-next-line:prefer-const
+      let contact: Contact = { email: '', name: '' };
 
-      if(entry.gd$name != undefined) {
+      if (entry.gd$name !== undefined) {
         contact.name = entry.gd$name.gd$fullName.$t;
-        console.log("Name of contact: " + contact.name);
+        console.log('Name of contact: ' + contact.name);
       }
 
-      if(Array.isArray(entry.gd$email)) {
-         entry.gd$email.forEach((emailEntry) => {
-         var email;
-         if(emailEntry.address != undefined) {
-             console.log("Email of contact: " + emailEntry.address);
-             email = emailEntry.address
-         }
-         contact.email = email;
-      });
-
-         this.contactList.push(contact);
+      if (Array.isArray(entry.gd$email)) {
+        entry.gd$email.forEach((emailEntry) => {
+          if (emailEntry.address !== undefined) {
+            console.log('Email of contact: ' + emailEntry.address);
+            contact.email = emailEntry.address;
+          }
+        });
       }
 
+      this.contactList.push(contact);
     });
 
     this.ContactsFound = true;

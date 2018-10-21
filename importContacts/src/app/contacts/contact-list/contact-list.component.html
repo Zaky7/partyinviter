@@ -3,13 +3,22 @@
     <br>
     <h4 class="card-title">Your Contacts</h4>
     <div class="card">
-      <div class="card-header">Contact Names
-        <span class="float-right">Emails Ids</span>
+      <div class="card-header">
+        <div class="wrapper">
+          <span> Index</span>
+          <span> Contact Names </span>
+          <span> Phone Number </span>
+          <span> Email Ids</span>
+        </div>
       </div>
-      <ul *ngFor="let contact of contacts" class="list-group list-group-flush">
+      <ul *ngFor="let contact of contacts;let i = index" class="list-group list-group-flush">
         <a class="list-group-item">
-          <span class="float-left">{{ contact.name }} </span>
-          <span class="float-right">{{ contact.email }}</span>
+          <div class="wrapper">
+            <span>{{i}} &nbsp; </span>
+            <span>{{ contact.name }} </span>
+            <span>{{ contact.phoneNumber }}</span>
+            <span>{{ contact.email }}</span>
+          </div>
         </a>
       </ul>
     </div>

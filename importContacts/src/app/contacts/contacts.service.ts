@@ -1,19 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { Observable, throwError, Subject } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Contact } from './contact.model';
+import {  BehaviorSubject, Subject } from 'rxjs';
+import { TouchSequence } from 'selenium-webdriver';
 
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ContactService {
+  contacts: Contact[] = [];
+  private contactsSubject = new Subject<Contact[]>();
+  contactArrived$ = this.contactsSubject.asObservable();
 
-  constructor() { }
-  contacts: any;
+  constructor() {
+  }
 
-
-
+  contactsArrived(contacts: Contact[]) {
+     console.log(`Contacts Arrived in Contact Service`);
+     if (contacts) {
+        this.contactsSubject.next(contacts);
+     }
+  }
 }

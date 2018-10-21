@@ -1,5 +1,2 @@
-<button class="btn btn-primary" (click)="googleContacts()">Import Contacts</button>
-<app-contact-list  *ngIf="ContactsFound; else nocontactsFound" [contacts]="contactList"></app-contact-list>
-<ng-template #nocontactsFound>
-    <p class="lead mt-5">{{ " No Contacts Found for User" | uppercase }} </p>
-</ng-template>
+<button class="btn btn-primary" (click)="fetchGoogleContacts()">Import Contacts</button>
+<app-contact-list [contacts]="contactsList"></app-contact-list>

@@ -1,24 +1,22 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactService } from './contacts.service';
-import { Subject } from 'rxjs';
 import { Contact } from './contact.model';
+import { Subject } from 'rxjs';
+import { ContactListComponent } from './contact-list/contact-list.component';
 declare var gapi: any;
 
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
-  styleUrls: ['./contacts.component.css']
+  styleUrls: ['./contacts.component.css'],
+  providers: [ContactService]
 })
 export class ContactsComponent implements OnInit {
   constructor(private http: HttpClient, private contactService: ContactService) {}
   authConfig: any;
-  contactList: Contact[] = [];
-  ContactsFound = false;
-
-
+  contactsList: Contact[] = [];
+  ContactsFound = true;
   ngOnInit() {
 
     this.ContactsFound = false;
@@ -28,9 +26,10 @@ export class ContactsComponent implements OnInit {
         '137487034693-7jlkkn3rbhr2vp66f2n2uodfo7gan8is.apps.googleusercontent.com',
       scope: 'https://www.googleapis.com/auth/contacts.readonly'
     };
+
   }
 
-  googleContacts() {
+  fetchGoogleContacts() {
     gapi.client.setApiKey('AIzaSyC8ugCg_7KVs1If9l06d6luCMQk9GUIGUw');
     gapi.auth2.authorize(this.authConfig, this.handleAuthorization);
   }
@@ -44,7 +43,7 @@ export class ContactsComponent implements OnInit {
       console.log('Authorization success, URL: ', url);
       this.http.get<any>(url).subscribe(response => {
         if (response.feed && response.feed.entry) {
-          console.log(response.feed.entry);
+          // console.log(response.feed.entry);
           this.saveContacts(response.feed.entry);
         }
       });
@@ -53,7 +52,7 @@ export class ContactsComponent implements OnInit {
 
   saveContacts(ContactEntry) {
 
-    this.contactList = [];
+    this.contactsList = [];
 
     ContactEntry.forEach((entry) => {
       // tslint:disable-next-line:prefer-const
@@ -61,23 +60,30 @@ export class ContactsComponent implements OnInit {
 
       if (entry.gd$name !== undefined) {
         contact.name = entry.gd$name.gd$fullName.$t;
-        console.log('Name of contact: ' + contact.name);
+        // console.log('Name of contact: ' + contact.name);
       }
 
       if (Array.isArray(entry.gd$email)) {
         entry.gd$email.forEach((emailEntry) => {
           if (emailEntry.address !== undefined) {
-            console.log('Email of contact: ' + emailEntry.address);
+           // console.log('Email of contact: ' + emailEntry.address);
             contact.email = emailEntry.address;
           }
         });
       }
 
-      this.contactList.push(contact);
+      this.contactsList.push(contact);
     });
 
     this.ContactsFound = true;
-    console.log(this.contactList);
+    this.contactService.contactsArrived(this.contactsList);
+    console.log(`Contacts List Length ${this.contactsList.length}`);
 
   }
+
+
+
+
+
+
 }

@@ -56,7 +56,7 @@ export class ContactsComponent implements OnInit {
 
     ContactEntry.forEach((entry) => {
       // tslint:disable-next-line:prefer-const
-      let contact: Contact = { email: 'N A', name: 'N A', phoneNumber: 'N A'};
+      let contact: Contact = { email: 'N/A', name: 'N/A', phoneNumber: 'N/A'};
 
       if (entry.gd$name !== undefined) {
         contact.name = entry.gd$name.gd$fullName.$t;
